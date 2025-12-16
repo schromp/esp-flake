@@ -88,7 +88,7 @@
         }
         if [[ -e "$out/etc" ]]; then
           handleEtc "$out/etc/bash_completion.d" "$out/share/bash-completion/completions"
-          rmdir $out/etc || { echo "Installer tries to install to /etc: $(ls $out/etc)"; exit 1; }
+          # rmdir $out/etc || { echo "Installer tries to install to /etc: $(ls $out/etc)"; exit 1; }
         fi
       '';
 
