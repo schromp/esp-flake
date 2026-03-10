@@ -1,4 +1,6 @@
-{pkgs ? import ../default.nix}:
+{
+  pkgs ? import ../default.nix,
+}:
 pkgs.mkShell {
   name = "esp-idf";
 
@@ -31,10 +33,27 @@ pkgs.mkShell {
     python3
     python3Packages.pip
     python3Packages.virtualenv
+
+    stdenv.cc.cc
+    zlib
+    libxml2
+    libxslt
+    libgcc
+    libudev-zero
+    python3
+    xz
   ];
+
+  LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
   shellHook = ''
     # fixes libstdc++ issues and libgl.so issues
-    export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [pkgs.libxml2 pkgs.zlib pkgs.stdenv.cc.cc.lib]}
+    export LD_LIBRARY_PATH=${
+      pkgs.lib.makeLibraryPath [
+        pkgs.libxml2
+        pkgs.zlib
+        pkgs.stdenv.cc.cc.lib
+      ]
+    }
     export ESP_IDF_VERSION=${pkgs.esp-idf-full.version}
     export LIBCLANG_PATH=${pkgs.llvm-xtensa-lib}/lib
     export RUSTFLAGS="--cfg espidf_time64"
